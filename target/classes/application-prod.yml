@@ -1,0 +1,18 @@
+# Kết nối production; cung cấp DB_HOST, DB_USERNAME, DB_PASSWORD và JWT_SECRET_BASE64 khi triển khai.
+spring:
+  datasource:
+    url: "jdbc:sqlserver://${DB_HOST}:${DB_PORT:1433};databaseName=${DB_NAME:shopflow};encrypt=true;trustServerCertificate=false"
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX_SIZE:20}
+      minimum-idle: ${DB_POOL_MIN_IDLE:5}
+      connection-timeout: ${DB_CONNECTION_TIMEOUT:30000}
+      pool-name: ShopFlowPool
+
+logging:
+  level:
+    root: INFO
+    com.shopflow: ${LOG_LEVEL_APP:INFO}
+    org.hibernate.SQL: WARN

@@ -1,0 +1,33 @@
+# Kết nối SQL Server trên máy cá nhân; mật khẩu lấy từ biến môi trường DB_PASSWORD.
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:sqlserver://localhost:1433;databaseName=master;encrypt=true;trustServerCertificate=true}
+    username: ${DB_USERNAME:sa}
+    password: ${DB_PASSWORD:Nguyendattre809}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 60000
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      leak-detection-threshold: 120000
+      pool-name: HikariPool-shopFlow-local
+  jpa:
+    # Không giữ phiên truy cập DB trong lúc tạo response; truy vấn thuộc tầng service.
+    open-in-view: false
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      # validate kiểm tra cấu trúc bảng; không tự tạo hoặc sửa schema.
+      ddl-auto: ${JPA_DDL_AUTO:validate}
+    properties:
+      hibernate:
+        # Các feature dùng chung database và schema shopFlow.
+        default_schema: ${DB_SCHEMA:shopFlow}
+        jdbc:
+          time_zone: Asia/Ho_Chi_Minh
+        format_sql: ${JPA_FORMAT_SQL:false}
+    show-sql: ${JPA_SHOW_SQL:false}
+logging:
+  level:
+    com.shopflow: ${LOG_LEVEL_APP:DEBUG}
+    org.hibernate.SQL: ${HIBERNATE_SQL_LOG_LEVEL:DEBUG}

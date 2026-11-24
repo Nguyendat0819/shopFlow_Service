@@ -1,0 +1,82 @@
+# Cấu hình dùng chung của ShopFlow; kết nối SQL Server được đặt theo từng profile.
+server:
+  # Cho phép thay cổng khi chạy máy cá nhân hoặc máy chủ.
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  forward-headers-strategy: framework
+
+spring:
+  application:
+    name: shopflow-service
+  profiles:
+    # Nếu chưa chọn profile qua SPRING_PROFILES_ACTIVE thì dùng cấu hình máy cá nhân.
+    default: ${SPRING_PROFILES_DEFAULT:local}
+  http:
+    clients:
+      # Giới hạn thời gian chờ khi module cần gọi API bên ngoài.
+      connect-timeout: ${HTTP_CONNECT_TIMEOUT:5s}
+      read-timeout: ${HTTP_READ_TIMEOUT:30s}
+
+  jackson:
+    default-property-inclusion: non_null
+    time-zone: Asia/Ho_Chi_Minh
+    deserialization:
+      fail-on-unknown-properties: false
+
+# Endpoint sức khỏe và số liệu phục vụ vận hành ứng dụng.
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+      base-path: /actuator
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: when_authorized
+  health:
+    livenessstate:
+      enabled: true
+    readinessstate:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+# Log ứng dụng dùng package gốc com.shopflow.
+logging:
+  level:
+    root: INFO
+    com.shopflow: ${LOG_LEVEL_APP:INFO}
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: ${HIBERNATE_SQL_LOG_LEVEL:WARN}
+  pattern:
+    level: "%5p [req=%X{requestId:-} username=%X{username:-} traceId=%X{traceId:-}]"
+
+# Tài liệu API; giao diện sẽ có dữ liệu sau khi controller được bổ sung.
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+
+# Cấu hình nghiệp vụ chung; secret phải được truyền qua biến môi trường.
+app:
+  jwt:
+    issuer: ${JWT_ISSUER:shopflow}
+    # Đơn vị giây, phù hợp kiểu long của cấu hình JWT trong template.
+    access-token-ttl: ${JWT_ACCESS_TOKEN_TTL:900}
+    secret-base64: ${JWT_SECRET_BASE64}
+  security:
+    enabled: ${APP_SECURITY_ENABLED:true}
+    cache:
+      enabled: ${APP_SECURITY_CACHE_ENABLED:true}
+  cors:
+    # Cho phép Angular gọi API khi chạy máy cá nhân; nhiều origin phân tách bằng dấu phẩy.
+    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS:http://localhost:4200}
