@@ -21,8 +21,8 @@ spring:
       ddl-auto: ${JPA_DDL_AUTO:validate}
     properties:
       hibernate:
-        # Các feature dùng chung database và schema shopFlow.
-        default_schema: ${DB_SCHEMA:shopFlow}
+        # Các feature dùng chung database và schema ShopFlow.
+        default_schema: ${DB_SCHEMA:ShopFlow}
         jdbc:
           time_zone: Asia/Ho_Chi_Minh
         format_sql: ${JPA_FORMAT_SQL:false}

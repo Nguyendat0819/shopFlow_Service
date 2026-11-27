@@ -44,6 +44,10 @@ management:
     metrics:
       export:
         enabled: true
+  otlp:
+    metrics:
+      export:
+        enabled: false
 
 # Log ứng dụng dùng package gốc com.shopflow.
 logging:
@@ -72,6 +76,7 @@ app:
     issuer: ${JWT_ISSUER:shopflow}
     # Đơn vị giây, phù hợp kiểu long của cấu hình JWT trong template.
     access-token-ttl: ${JWT_ACCESS_TOKEN_TTL:900}
+    # Production bắt buộc lấy khóa từ môi trường; khóa mẫu local được đặt trong application-local.yml.
     secret-base64: ${JWT_SECRET_BASE64}
   security:
     enabled: ${APP_SECURITY_ENABLED:true}

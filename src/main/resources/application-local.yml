@@ -21,8 +21,8 @@ spring:
       ddl-auto: ${JPA_DDL_AUTO:validate}
     properties:
       hibernate:
-        # Các feature dùng chung database và schema shopFlow.
-        default_schema: ${DB_SCHEMA:shopFlow}
+        # Các feature dùng chung database và schema ShopFlow.
+        default_schema: ${DB_SCHEMA:ShopFlow}
         jdbc:
           time_zone: Asia/Ho_Chi_Minh
         format_sql: ${JPA_FORMAT_SQL:false}
@@ -31,3 +31,8 @@ logging:
   level:
     com.shopflow: ${LOG_LEVEL_APP:DEBUG}
     org.hibernate.SQL: ${HIBERNATE_SQL_LOG_LEVEL:DEBUG}
+
+# Khóa mẫu chỉ dùng chạy local; môi trường khác phải cung cấp JWT_SECRET_BASE64 riêng.
+app:
+  jwt:
+    secret-base64: ${JWT_SECRET_BASE64:c6OjzxrprJa+q4Ne4rEvfg50ghi058OWgsAjRqlpqo8=}
